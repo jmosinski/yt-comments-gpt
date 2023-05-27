@@ -28,7 +28,7 @@ def get_markdown_report(title, comments, max_tokens=1000):
     joined_comments = '\n'.join(comments)
     num_comments = len(comments)
     prompt = f"""
-Create a detailed, polite and constructive report where you answer the questions asked based on the provided comments for the YouTube video titled "{title}", use markdown format. The questions are enclosed with <questions start><questions end>.  Additional instructions for answering a given question are enclosed with <>. Rephrase the qustions approprietly for the report format. The comments are enclosed with <comments start><comments end> and separeted by new lines. There are {num_comments} most popular comments. 
+Create a detailed, polite and constructive report answering the provided questions based on the provided comments for the YouTube video titled "{title}", use markdown format. The questions are enclosed with <questions start><questions end>.  Additional instructions for answering a given question are enclosed with <>. Rephrase the qustions approprietly for the report format. The comments are enclosed with <comments start><comments end> and separeted by new lines. There are {num_comments} most popular comments. 
 
 <questions start>
 What percentage of comments have "Positive", "Negative", "Neutral" sentiment? <to answer follow steps: 1. classify each comment as positive, negative, netural 2. compute the average scores 3. return results as percentages by dividing the avera by the total number of comments, use bulletpoint format>
