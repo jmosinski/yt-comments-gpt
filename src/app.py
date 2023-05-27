@@ -3,6 +3,7 @@ import openai
 from youtube_comment_downloader import YoutubeCommentDownloader
 from pytube import YouTube
 
+
 def fetch_comments(url, max_tokens=2500):
     downloader = YoutubeCommentDownloader()
     comments = []
@@ -89,4 +90,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
