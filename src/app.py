@@ -1,13 +1,7 @@
 import streamlit as st
 import openai
-import webbrowser
 from youtube_comment_downloader import YoutubeCommentDownloader
 from pytube import YouTube
-
-
-def open_feedback_form():
-    url = "https://forms.gle/K9jQF1PLNzad4JNp6"
-    webbrowser.open(url)
 
 
 def fetch_comments(url, max_tokens=2500):
@@ -89,7 +83,10 @@ def main():
                     title=title, comments=reduced_comments, max_tokens=max_response_tokens
                 )
             st.markdown(markdown_report)
-            st.button("Pretty Please Click Me and Provide Feedback!", on_click=open_feedback_form)
+            st.write(
+                "[Pretty Please Click Me and Provide Feedback!](https://forms.gle/K9jQF1PLNzad4JNp6)",
+                unsafe_allow_html=True
+            )
         except Exception as e:
             print(e)
             st.error("Something went wrong! Probably wrong URL or API Key. Please check your inputs and try again.")
