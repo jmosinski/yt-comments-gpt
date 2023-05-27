@@ -1,7 +1,13 @@
 import streamlit as st
 import openai
+import webbrowser
 from youtube_comment_downloader import YoutubeCommentDownloader
 from pytube import YouTube
+
+
+def open_feedback_form():
+    url = "https://forms.gle/K9jQF1PLNzad4JNp6"
+    webbrowser.open(url)
 
 
 def fetch_comments(url, max_tokens=2500):
@@ -28,7 +34,7 @@ def get_markdown_report(title, comments, max_tokens=1000):
     joined_comments = '\n'.join(comments)
     num_comments = len(comments)
     prompt = f"""
-Create a detailed, polite and constructive report answering the provided questions based on the provided comments for the YouTube video titled "{title}", use markdown format. The questions are enclosed with <questions start><questions end>.  Additional instructions for answering a given question are enclosed with <>. Rephrase the qustions approprietly for the report format. The comments are enclosed with <comments start><comments end> and separeted by new lines. There are {num_comments} most popular comments. 
+Create a detailed, polite and constructive report answering the provided questions based on the provided comments for the YouTube video titled "{title}". Report must be in a markdown format with appropriate sections. The questions are enclosed with <questions start><questions end>.  Additional instructions for answering a given question are enclosed with <>. Rephrase the qustions approprietly for the report format. The comments are enclosed with <comments start><comments end> and separeted by new lines. There are {num_comments} most popular comments. 
 
 <questions start>
 What percentage of comments have "Positive", "Negative", "Neutral" sentiment? <to answer follow steps: 1. classify each comment as positive, negative, netural 2. compute the average scores 3. return results as percentages by dividing the avera by the total number of comments, use bulletpoint format>
@@ -83,6 +89,7 @@ def main():
                     title=title, comments=reduced_comments, max_tokens=max_response_tokens
                 )
             st.markdown(markdown_report)
+            st.button("Pretty Please Click Me and Provide Feedback!", on_click=open_feedback_form)
         except Exception as e:
             print(e)
             st.error("Something went wrong! Probably wrong URL or API Key. Please check your inputs and try again.")
