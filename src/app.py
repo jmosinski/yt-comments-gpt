@@ -1,7 +1,7 @@
 import streamlit as st
 import openai
 from youtube_comment_downloader import YoutubeCommentDownloader
-
+from pytube import YouTube
 
 def fetch_comments(url, max_tokens=2500):
     downloader = YoutubeCommentDownloader()
@@ -23,11 +23,11 @@ def drop_comments(comments, max_tokens, requested_tokens):
     return comments[:-num_comments_to_drop]
 
 
-def get_markdown_report(comments, max_tokens=1000):
+def get_markdown_report(title, comments, max_tokens=1000):
     joined_comments = '\n'.join(comments)
     num_comments = len(comments)
     prompt = f"""
-Create a detailed, polite and constructive report answering the provided questions based on the provided comments, use markdown format. The questions are enclosed with <questions start><questions end>.  Additional instructions for answering a given question are enclosed with <>. Rephrase the qustions approprietly for the report format. The comments are enclosed with <comments start><comments end> and separeted by new lines. There are {num_comments} most popular comments. 
+Create a detailed, polite and constructive report where you answer the questions asked based on the provided comments for the YouTube video titled "{title}", use markdown format. The questions are enclosed with <questions start><questions end>.  Additional instructions for answering a given question are enclosed with <>. Rephrase the qustions approprietly for the report format. The comments are enclosed with <comments start><comments end> and separeted by new lines. There are {num_comments} most popular comments. 
 
 <questions start>
 What percentage of comments have "Positive", "Negative", "Neutral" sentiment? <to answer follow steps: 1. classify each comment as positive, negative, netural 2. compute the average scores 3. return results as percentages by dividing the avera by the total number of comments, use bulletpoint format>
@@ -63,9 +63,13 @@ def main():
     if st.button("Analyze Comments"):
         openai.api_key = api_key
         try:
+            title = YouTube(url).title
             comments = fetch_comments(url=url, max_tokens=max_tokens_comments)
             try:
-                markdown_report = get_markdown_report(comments=comments)
+                markdown_report = get_markdown_report(
+                    title=title, comments=comments, max_tokens=max_response_tokens
+                )
+            # Handle too many tokens provided by dropping some comments
             except Exception as e:
                 print(e)
                 import re
@@ -74,7 +78,9 @@ def main():
                 reduced_comments = drop_comments(
                     comments, max_tokens=max_tokens_comments, requested_tokens=requested_comments_tokens
                 )
-                markdown_report = get_markdown_report(comments=reduced_comments, max_tokens=max_response_tokens)
+                markdown_report = get_markdown_report(
+                    title=title, comments=reduced_comments, max_tokens=max_response_tokens
+                )
             st.markdown(markdown_report)
         except Exception as e:
             print(e)
