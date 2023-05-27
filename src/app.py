@@ -59,7 +59,7 @@ def main():
 
     st.title("YouTube Comments Analyzer")
     url = st.text_input("Enter YouTube URL")
-    api_key = st.text_input("Enter OpanAI API Key")
+    api_key = st.text_input("Enter OpenAI API Key")
     if st.button("Analyze Comments"):
         openai.api_key = api_key
         try:
@@ -83,5 +83,4 @@ def main():
 
 if __name__ == '__main__':
     main()
-
 
