@@ -1,2 +1,2 @@
-# comments-gpt
-ChatGPT based tool for comments analysis.
+# yt-comments-gpt
+ChatGPT-based tool for YouTube comments analysis.
